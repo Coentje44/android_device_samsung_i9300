@@ -53,8 +53,15 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 #	ro.telephony.ril_class=Smdk4210RIL \
 	mobiledata.interfaces=pdp0,wlan0,gprs,ppp0
 
+# audio
+PRODUCT_COPY_FILES += \
+	device/samsung/i9300/configs/tiny_hw.xml:system/etc/sound/GT-I9300
+
+# HAL stuff
 PRODUCT_PACKAGES += \
-	libsf_dummy_client
+	libsf_dummy_client \
+	audio.primary.exynos4 \
+	audio.a2dp.default	
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_i9300
