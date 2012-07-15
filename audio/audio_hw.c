@@ -197,7 +197,7 @@ static int set_bigroute_by_array(struct mixer *mixer, struct route_setting *rout
     while (route[i].ctl_name) {
         ctl = mixer_get_ctl_by_name(mixer, route[i].ctl_name);
         if (!ctl) {
-        LOGE("Unknown control '%s'\n", route[i].ctl_name);
+        ALOGE("Unknown control '%s'\n", route[i].ctl_name);
             return -EINVAL;
         }
 
@@ -205,16 +205,16 @@ static int set_bigroute_by_array(struct mixer *mixer, struct route_setting *rout
             if (enable) {
                 ret = mixer_ctl_set_enum_by_string(ctl, route[i].strval);
                 if (ret != 0) {
-                    LOGE("Failed to set '%s' to '%s'\n", route[i].ctl_name, route[i].strval);
+                    ALOGE("Failed to set '%s' to '%s'\n", route[i].ctl_name, route[i].strval);
                 } else {
-                    LOGV("Set '%s' to '%s'\n", route[i].ctl_name, route[i].strval);
+                    ALOGV("Set '%s' to '%s'\n", route[i].ctl_name, route[i].strval);
                 }
             } else {
                 ret = mixer_ctl_set_enum_by_string(ctl, "Off");
                 if (ret != 0) {
-                    LOGE("Failed to set '%s' to '%s'\n", route[i].ctl_name, route[i].strval);
+                    ALOGE("Failed to set '%s' to '%s'\n", route[i].ctl_name, route[i].strval);
                 } else {
-                    LOGV("Set '%s' to '%s'\n", route[i].ctl_name, "Off");
+                    ALOGV("Set '%s' to '%s'\n", route[i].ctl_name, "Off");
                 }
             }
         } else {
@@ -223,16 +223,16 @@ static int set_bigroute_by_array(struct mixer *mixer, struct route_setting *rout
                 if (enable) {
                     ret = mixer_ctl_set_value(ctl, j, route[i].intval);
                     if (ret != 0) {
-                        LOGE("Failed to set '%s' to '%d'\n", route[i].ctl_name, route[i].intval);
+                        ALOGE("Failed to set '%s' to '%d'\n", route[i].ctl_name, route[i].intval);
                     } else {
-                        LOGV("Set '%s' to '%d'\n", route[i].ctl_name, route[i].intval);
+                        ALOGV("Set '%s' to '%d'\n", route[i].ctl_name, route[i].intval);
                     }
                 } else {
                     ret = mixer_ctl_set_value(ctl, j, 0);
                     if (ret != 0) {
-                        LOGE("Failed to set '%s' to '%d'\n", route[i].ctl_name, route[i].intval);
+                        ALOGE("Failed to set '%s' to '%d'\n", route[i].ctl_name, route[i].intval);
                     } else {
-                        LOGV("Set '%s' to '%d'\n", route[i].ctl_name, 0);
+                        ALOGV("Set '%s' to '%d'\n", route[i].ctl_name, 0);
                     }
                 }
             }
@@ -255,17 +255,17 @@ static int set_route_by_array(struct mixer *mixer, struct route_setting *route,
     for (i = 0; i < len; i++) {
         ctl = mixer_get_ctl_by_name(mixer, route[i].ctl_name);
         if (!ctl) {
-        LOGE("Unknown control '%s'\n", route[i].ctl_name);
+        ALOGE("Unknown control '%s'\n", route[i].ctl_name);
             return -EINVAL;
         }
 
         if (route[i].strval) {
         ret = mixer_ctl_set_enum_by_string(ctl, route[i].strval);
         if (ret != 0) {
-        LOGE("Failed to set '%s' to '%s'\n",
+        ALOGE("Failed to set '%s' to '%s'\n",
              route[i].ctl_name, route[i].strval);
         } else {
-        LOGV("Set '%s' to '%s'\n",
+        ALOGV("Set '%s' to '%s'\n",
              route[i].ctl_name, route[i].strval);
         }
 
@@ -274,10 +274,10 @@ static int set_route_by_array(struct mixer *mixer, struct route_setting *route,
             for (j = 0; j < mixer_ctl_get_num_values(ctl); j++) {
         ret = mixer_ctl_set_value(ctl, j, route[i].intval);
         if (ret != 0) {
-            LOGE("Failed to set '%s'.%d to %d\n",
+            ALOGE("Failed to set '%s'.%d to %d\n",
              route[i].ctl_name, j, route[i].intval);
         } else {
-            LOGV("Set '%s'.%d to %d\n",
+            ALOGV("Set '%s'.%d to %d\n",
              route[i].ctl_name, j, route[i].intval);
         }
         }
@@ -295,7 +295,7 @@ void select_devices(struct m0_audio_device *adev)
     if (adev->active_devices == adev->devices)
     return;
 
-    LOGV("Changing devices %x => %x\n", adev->active_devices, adev->devices);
+    ALOGV("Changing devices %x => %x\n", adev->active_devices, adev->devices);
 
     /* Turn on new devices first so we don't glitch due to powerdown... */
     for (i = 0; i < adev->num_dev_cfgs; i++)
@@ -316,8 +316,8 @@ void select_devices(struct m0_audio_device *adev)
 
 static int start_call(struct m0_audio_device *adev)
 {
-    LOGD("%s: E", __func__);
-    LOGE("Opening modem PCMs");
+    ALOGD("%s: E", __func__);
+    ALOGE("Opening modem PCMs");
     int bt_on;
     
     bt_on = adev->devices & AUDIO_DEVICE_OUT_ALL_SCO;
@@ -330,7 +330,7 @@ static int start_call(struct m0_audio_device *adev)
         else
             adev->pcm_modem_dl = pcm_open(CARD_DEFAULT, PORT_MODEM, PCM_OUT, &pcm_config_vx);
         if (!pcm_is_ready(adev->pcm_modem_dl)) {
-            LOGE("cannot open PCM modem DL stream: %s", pcm_get_error(adev->pcm_modem_dl));
+            ALOGE("cannot open PCM modem DL stream: %s", pcm_get_error(adev->pcm_modem_dl));
             goto err_open_dl;
         }
     }
@@ -338,7 +338,7 @@ static int start_call(struct m0_audio_device *adev)
     if (adev->pcm_modem_ul == NULL) {
         adev->pcm_modem_ul = pcm_open(CARD_DEFAULT, PORT_MODEM, PCM_IN, &pcm_config_vx);
         if (!pcm_is_ready(adev->pcm_modem_ul)) {
-            LOGE("cannot open PCM modem UL stream: %s", pcm_get_error(adev->pcm_modem_ul));
+            ALOGE("cannot open PCM modem UL stream: %s", pcm_get_error(adev->pcm_modem_ul));
             goto err_open_ul;
         }
     }
@@ -346,7 +346,7 @@ static int start_call(struct m0_audio_device *adev)
     pcm_start(adev->pcm_modem_dl);
     pcm_start(adev->pcm_modem_ul);
 
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 
     return 0;
 
@@ -362,15 +362,15 @@ err_open_dl:
 
 static void end_call(struct m0_audio_device *adev)
 {
-    LOGD("%s: E", __func__);
-    LOGE("Closing modem PCMs");
+    ALOGD("%s: E", __func__);
+    ALOGE("Closing modem PCMs");
     pcm_stop(adev->pcm_modem_dl);
     pcm_stop(adev->pcm_modem_ul);
     pcm_close(adev->pcm_modem_dl);
     pcm_close(adev->pcm_modem_ul);
     adev->pcm_modem_dl = NULL;
     adev->pcm_modem_ul = NULL;
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 }
 
 static void set_eq_filter(struct m0_audio_device *adev)
@@ -379,7 +379,7 @@ static void set_eq_filter(struct m0_audio_device *adev)
 
 void audio_set_wb_amr_callback(void *data, int enable)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     struct m0_audio_device *adev = (struct m0_audio_device *)data;
 
     pthread_mutex_lock(&adev->lock);
@@ -394,12 +394,12 @@ void audio_set_wb_amr_callback(void *data, int enable)
         }
     }
     pthread_mutex_unlock(&adev->lock);
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 }
 
 static void set_incall_device(struct m0_audio_device *adev)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     int device_type;
 
     switch(adev->devices & AUDIO_DEVICE_OUT_ALL) {
@@ -432,9 +432,9 @@ static void set_incall_device(struct m0_audio_device *adev)
     }
 
     /* if output device isn't supported, open modem side to handset by default */
-    LOGD("%s: ril_set_call_audio_path(%d)", __func__, device_type);
+    ALOGD("%s: ril_set_call_audio_path(%d)", __func__, device_type);
     ril_set_call_audio_path(&adev->ril, device_type);
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 }
 
 static void set_input_volumes(struct m0_audio_device *adev, int main_mic_on,
@@ -470,9 +470,9 @@ static void force_all_standby(struct m0_audio_device *adev)
 
 static void select_mode(struct m0_audio_device *adev)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     if (adev->mode == AUDIO_MODE_IN_CALL) {
-        LOGE("Entering IN_CALL state, in_call=%d", adev->in_call);
+        ALOGE("Entering IN_CALL state, in_call=%d", adev->in_call);
         if (!adev->in_call) {
             force_all_standby(adev);
             /* force earpiece route for in call state if speaker is the
@@ -498,7 +498,7 @@ static void select_mode(struct m0_audio_device *adev)
             adev->in_call = 1;
         }
     } else {
-        LOGE("Leaving IN_CALL state, in_call=%d, mode=%d",
+        ALOGE("Leaving IN_CALL state, in_call=%d, mode=%d",
              adev->in_call, adev->mode);
         if (adev->in_call) {
             adev->in_call = 0;
@@ -508,12 +508,12 @@ static void select_mode(struct m0_audio_device *adev)
             select_input_device(adev);
         }
     }
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 }
 
 static void select_output_device(struct m0_audio_device *adev)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     int headset_on;
     int headphone_on;
     int speaker_on;
@@ -530,28 +530,28 @@ static void select_output_device(struct m0_audio_device *adev)
 
     switch(adev->devices & AUDIO_DEVICE_OUT_ALL) {
         case AUDIO_DEVICE_OUT_SPEAKER:
-            LOGD("%s: AUDIO_DEVICE_OUT_SPEAKER", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_SPEAKER", __func__);
             break;
         case AUDIO_DEVICE_OUT_WIRED_HEADSET:
-            LOGD("%s: AUDIO_DEVICE_OUT_WIRED_HEADSET", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_WIRED_HEADSET", __func__);
             break;
         case AUDIO_DEVICE_OUT_WIRED_HEADPHONE:
-            LOGD("%s: AUDIO_DEVICE_OUT_WIRED_HEADPHONE", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_WIRED_HEADPHONE", __func__);
             break;
         case AUDIO_DEVICE_OUT_EARPIECE:
-            LOGD("%s: AUDIO_DEVICE_OUT_EARPIECE", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_EARPIECE", __func__);
             break;
         case AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET:
-            LOGD("%s: AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET", __func__);
             break;
         case AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET:
-            LOGD("%s: AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_DGTL_DOCK_HEADSET", __func__);
             break;
         case AUDIO_DEVICE_OUT_ALL_SCO:
-            LOGD("%s: AUDIO_DEVICE_OUT_ALL_SCO", __func__);
+            ALOGD("%s: AUDIO_DEVICE_OUT_ALL_SCO", __func__);
             break;
         default:
-            LOGD("%s: DEFAULT OUTPUT", __func__);
+            ALOGD("%s: DEFAULT OUTPUT", __func__);
             break;
     }
 
@@ -583,15 +583,15 @@ static void select_output_device(struct m0_audio_device *adev)
         }
 
         if (headset_on || headphone_on || speaker_on || earpiece_on) {
-            LOGD("%s: set bigroute: voicecall_input_default", __func__);
+            ALOGD("%s: set bigroute: voicecall_input_default", __func__);
             set_bigroute_by_array(adev->mixer, voicecall_default, 1);
         } else {
-            LOGD("%s: set bigroute: voicecall_input_default_disable", __func__);
+            ALOGD("%s: set bigroute: voicecall_input_default_disable", __func__);
             set_bigroute_by_array(adev->mixer, voicecall_default_disable, 1);
         }
         
         if (headset_on || headphone_on) {
-            LOGD("%s: set bigroute: headset_input", __func__);
+            ALOGD("%s: set bigroute: headset_input", __func__);
             set_bigroute_by_array(adev->mixer, headset_input, 1);
         }
             
@@ -599,45 +599,45 @@ static void select_output_device(struct m0_audio_device *adev)
             // bt uses a different port (PORT_BT) for playback, reopen the pcms
             end_call(adev);
             start_call(adev);
-            LOGD("%s: set bigroute: bt_input", __func__);
+            ALOGD("%s: set bigroute: bt_input", __func__);
             set_bigroute_by_array(adev->mixer, bt_input, 1);
-            LOGD("%s: set bigroute: bt_output", __func__);
+            ALOGD("%s: set bigroute: bt_output", __func__);
             set_bigroute_by_array(adev->mixer, bt_output, 1);
         }
         set_incall_device(adev);
     }
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 }
 
 static void select_input_device(struct m0_audio_device *adev)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
 
     switch(adev->devices & AUDIO_DEVICE_IN_ALL) {
         case AUDIO_DEVICE_IN_BUILTIN_MIC:
-            LOGD("%s: AUDIO_DEVICE_IN_BUILTIN_MIC", __func__);
+            ALOGD("%s: AUDIO_DEVICE_IN_BUILTIN_MIC", __func__);
             break;
         case AUDIO_DEVICE_IN_BACK_MIC:
-            LOGD("%s: AUDIO_DEVICE_IN_BACK_MIC", __func__);
+            ALOGD("%s: AUDIO_DEVICE_IN_BACK_MIC", __func__);
             break;
         case AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET:
-            LOGD("%s: AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET", __func__);
+            ALOGD("%s: AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET", __func__);
             break;
         case AUDIO_DEVICE_IN_WIRED_HEADSET:
-            LOGD("%s: AUDIO_DEVICE_IN_WIRED_HEADSET", __func__);
+            ALOGD("%s: AUDIO_DEVICE_IN_WIRED_HEADSET", __func__);
             break;
         default:
             break;
     }
 
     select_devices(adev);
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
 }
 
 /* must be called with hw device and output stream mutexes locked */
 static int start_output_stream(struct m0_stream_out *out)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     struct m0_audio_device *adev = out->dev;
     unsigned int flags = PCM_OUT | PCM_MMAP;
     int i;
@@ -656,7 +656,7 @@ static int start_output_stream(struct m0_stream_out *out)
 
     /* Close PCM that could not be opened properly and return an error */
     if (out->pcm && !pcm_is_ready(out->pcm)) {
-        LOGE("cannot open pcm_out driver: %s", pcm_get_error(out->pcm));
+        ALOGE("cannot open pcm_out driver: %s", pcm_get_error(out->pcm));
         pcm_close(out->pcm);
         out->pcm = NULL;
         success = false;
@@ -671,7 +671,7 @@ static int start_output_stream(struct m0_stream_out *out)
     }
 
     adev->active_output = NULL;
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
     return -ENOMEM;
 }
 
@@ -785,7 +785,7 @@ static int get_playback_delay(struct m0_stream_out *out,
         buffer->time_stamp.tv_sec  = 0;
         buffer->time_stamp.tv_nsec = 0;
         buffer->delay_ns           = 0;
-        LOGV("get_playback_delay(): pcm_get_htimestamp error,"
+        ALOGV("get_playback_delay(): pcm_get_htimestamp error,"
                 "setting playbackTimestamp to 0");
         return status;
     }
@@ -885,7 +885,7 @@ static int out_dump(const struct audio_stream *stream, int fd)
 
 static int out_set_parameters(struct audio_stream *stream, const char *kvpairs)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     struct m0_stream_out *out = (struct m0_stream_out *)stream;
     struct m0_audio_device *adev = out->dev;
     struct m0_stream_in *in;
@@ -925,7 +925,7 @@ static int out_set_parameters(struct audio_stream *stream, const char *kvpairs)
     }
 
     str_parms_destroy(parms);
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
     return ret;
 }
 
@@ -1088,7 +1088,7 @@ static int out_remove_audio_effect(const struct audio_stream *stream, effect_han
 /* must be called with hw device and input stream mutexes locked */
 static int start_input_stream(struct m0_stream_in *in)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     int ret = 0;
     struct m0_audio_device *adev = in->dev;
 
@@ -1121,7 +1121,7 @@ static int start_input_stream(struct m0_stream_in *in)
     in->pcm = pcm_open(CARD_DEFAULT, PORT_CAPTURE, PCM_IN, &in->config);
 
     if (!pcm_is_ready(in->pcm)) {
-        LOGE("cannot open pcm_in driver: %s", pcm_get_error(in->pcm));
+        ALOGE("cannot open pcm_in driver: %s", pcm_get_error(in->pcm));
         pcm_close(in->pcm);
         adev->active_input = NULL;
         return -ENOMEM;
@@ -1136,7 +1136,7 @@ static int start_input_stream(struct m0_stream_in *in)
     if (in->resampler) {
         in->resampler->reset(in->resampler);
     }
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
     return 0;
 }
 
@@ -1229,7 +1229,7 @@ static int in_dump(const struct audio_stream *stream, int fd)
 
 static int in_set_parameters(struct audio_stream *stream, const char *kvpairs)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     struct m0_stream_in *in = (struct m0_stream_in *)stream;
     struct m0_audio_device *adev = in->dev;
     struct str_parms *parms;
@@ -1248,7 +1248,7 @@ static int in_set_parameters(struct audio_stream *stream, const char *kvpairs)
         val = atoi(value);
         /* no audio source uses val == 0 */
         if ((in->source != val) && (val != 0)) {
-            LOGD("%s: in->source=%d", __func__, val);
+            ALOGD("%s: in->source=%d", __func__, val);
             in->source = val;
             do_standby = true;
         }
@@ -1258,7 +1258,7 @@ static int in_set_parameters(struct audio_stream *stream, const char *kvpairs)
     if (ret >= 0) {
         val = atoi(value);
         if ((in->device != val) && (val != 0)) {
-            LOGD("%s: in->device=%d", __func__, val);
+            ALOGD("%s: in->device=%d", __func__, val);
             in->device = val;
             do_standby = true;
         }
@@ -1270,7 +1270,7 @@ static int in_set_parameters(struct audio_stream *stream, const char *kvpairs)
     pthread_mutex_unlock(&adev->lock);
 
     str_parms_destroy(parms);
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
     return ret;
 }
 
@@ -1302,7 +1302,7 @@ static void get_capture_delay(struct m0_stream_in *in,
         buffer->time_stamp.tv_sec  = 0;
         buffer->time_stamp.tv_nsec = 0;
         buffer->delay_ns           = 0;
-        LOGW("read get_capture_delay(): pcm_htimestamp error");
+        ALOGW("read get_capture_delay(): pcm_htimestamp error");
         return;
     }
 
@@ -1327,7 +1327,7 @@ static void get_capture_delay(struct m0_stream_in *in,
 
     buffer->time_stamp = tstamp;
     buffer->delay_ns   = delay_ns;
-    LOGV("get_capture_delay time_stamp = [%ld].[%ld], delay_ns: [%d],"
+    ALOGV("get_capture_delay time_stamp = [%ld].[%ld], delay_ns: [%d],"
          " kernel_delay:[%ld], buf_delay:[%ld], rsmp_delay:[%ld], kernel_frames:[%d], "
          "in->read_buf_frames:[%d], in->proc_buf_frames:[%d], frames:[%d]",
          buffer->time_stamp.tv_sec , buffer->time_stamp.tv_nsec, buffer->delay_ns,
@@ -1341,7 +1341,7 @@ static int32_t update_echo_reference(struct m0_stream_in *in, size_t frames)
     struct echo_reference_buffer b;
     b.delay_ns = 0;
 
-    LOGV("update_echo_reference, frames = [%d], in->ref_frames_in = [%d],  "
+    ALOGV("update_echo_reference, frames = [%d], in->ref_frames_in = [%d],  "
           "b.frame_count = [%d]",
          frames, in->ref_buf_frames, frames - in->ref_buf_frames);
     if (in->ref_buf_frames < frames) {
@@ -1357,12 +1357,12 @@ static int32_t update_echo_reference(struct m0_stream_in *in, size_t frames)
         if (in->echo_reference->read(in->echo_reference, &b) == 0)
         {
             in->ref_buf_frames += b.frame_count;
-            LOGD("update_echo_reference(): in->ref_buf_frames:[%d], "
+            ALOGD("update_echo_reference(): in->ref_buf_frames:[%d], "
                     "in->ref_buf_size:[%d], frames:[%d], b.frame_count:[%d]",
                  in->ref_buf_frames, in->ref_buf_size, frames, b.frame_count);
         }
     } else
-        LOGW("update_echo_reference: NOT enough frames to read ref buffer");
+        ALOGW("update_echo_reference: NOT enough frames to read ref buffer");
     return b.delay_ns;
 }
 
@@ -1454,14 +1454,14 @@ static int get_next_buffer(struct resampler_buffer_provider *buffer_provider,
         if (in->read_buf_size < in->config.period_size) {
             in->read_buf_size = in->config.period_size;
             in->read_buf = (int16_t *) realloc(in->read_buf, size_in_bytes);
-            LOGI("get_next_buffer(): read_buf %p extended to %d bytes",
+            ALOGI("get_next_buffer(): read_buf %p extended to %d bytes",
                   in->read_buf, size_in_bytes);
         }
 
         in->read_status = pcm_read(in->pcm, (void*)in->read_buf, size_in_bytes);
 
         if (in->read_status != 0) {
-            LOGE("get_next_buffer() pcm_read error %d", in->read_status);
+            ALOGE("get_next_buffer() pcm_read error %d", in->read_status);
             buffer->raw = NULL;
             buffer->frame_count = 0;
             return in->read_status;
@@ -1551,7 +1551,7 @@ static ssize_t process_frames(struct m0_stream_in *in, void* buffer, ssize_t fra
 
                 in->proc_buf_size = (size_t)frames;
                 in->proc_buf_in = (int16_t *)realloc(in->proc_buf_in, size_in_bytes);
-                LOGD("process_frames(): proc_buf_in %p extended to %d bytes", in->proc_buf_in, size_in_bytes);
+                ALOGD("process_frames(): proc_buf_in %p extended to %d bytes", in->proc_buf_in, size_in_bytes);
             }
             frames_rd = read_frames(in,
                                     in->proc_buf_in +
@@ -1598,7 +1598,7 @@ static ssize_t process_frames(struct m0_stream_in *in, void* buffer, ssize_t fra
             frames_wr += out_buf.frameCount;
         } else {
             /* The effect does not comply to the API. In theory, we should never end up here! */
-            LOGE("preprocessing produced too many frames: %d + %d  > %d !",
+            ALOGE("preprocessing produced too many frames: %d + %d  > %d !",
                   (unsigned int)frames_wr, out_buf.frameCount, (unsigned int)frames);
             frames_wr = frames;
         }
@@ -1817,7 +1817,7 @@ static void adev_close_output_stream(struct audio_hw_device *dev,
 
 static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     struct m0_audio_device *adev = (struct m0_audio_device *)dev;
     struct str_parms *parms;
     char *str;
@@ -1866,7 +1866,7 @@ static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
     }
 
     str_parms_destroy(parms);
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
     return ret;
 }
 
@@ -1948,7 +1948,7 @@ static int adev_open_input_stream(struct audio_hw_device *dev, uint32_t devices,
                                   audio_in_acoustics_t acoustics,
                                   struct audio_stream_in **stream_in)
 {
-    LOGD("%s: E", __func__);
+    ALOGD("%s: E", __func__);
     struct m0_audio_device *ladev = (struct m0_audio_device *)dev;
     struct m0_stream_in *in;
     int ret;
@@ -1984,11 +1984,11 @@ static int adev_open_input_stream(struct audio_hw_device *dev, uint32_t devices,
 
 
     if (in->requested_rate != in->config.rate) {
-        LOGD("%s: requested_rate=%d, config.rate=%d", __func__, in->requested_rate, in->config.rate);
+        ALOGD("%s: requested_rate=%d, config.rate=%d", __func__, in->requested_rate, in->config.rate);
         in->buf_provider.get_next_buffer = get_next_buffer;
         in->buf_provider.release_buffer = release_buffer;
         
-        LOGD("%s: create_resampler()", __func__);
+        ALOGD("%s: create_resampler()", __func__);
         ret = create_resampler(in->config.rate,
                                in->requested_rate,
                                in->config.channels,
@@ -2006,7 +2006,7 @@ static int adev_open_input_stream(struct audio_hw_device *dev, uint32_t devices,
     in->device = devices;
 
     *stream_in = &in->stream;
-    LOGD("%s: X", __func__);
+    ALOGD("%s: X", __func__);
     return 0;
 
 err:
@@ -2121,18 +2121,18 @@ static void adev_config_start(void *data, const XML_Char *elem,
 
     if (strcmp(elem, "device") == 0) {
     if (!name) {
-        LOGE("Unnamed device\n");
+        ALOGE("Unnamed device\n");
         return;
     }
 
     for (i = 0; i < sizeof(dev_names) / sizeof(dev_names[0]); i++) {
         if (strcmp(dev_names[i].name, name) == 0) {
-        LOGI("Allocating device %s\n", name);
+        ALOGI("Allocating device %s\n", name);
         dev_cfg = realloc(s->adev->dev_cfgs,
                   (s->adev->num_dev_cfgs + 1)
                   * sizeof(*dev_cfg));
         if (!dev_cfg) {
-            LOGE("Unable to allocate dev_cfg\n");
+            ALOGE("Unable to allocate dev_cfg\n");
             return;
         }
 
@@ -2147,7 +2147,7 @@ static void adev_config_start(void *data, const XML_Char *elem,
 
     } else if (strcmp(elem, "path") == 0) {
     if (s->path_len)
-        LOGW("Nested paths\n");
+        ALOGW("Nested paths\n");
 
     /* If this a path for a device it must have a role */
     if (s->dev) {
@@ -2157,7 +2157,7 @@ static void adev_config_start(void *data, const XML_Char *elem,
         } else if (strcmp(name, "off") == 0) {
         s->on = false;
         } else {
-        LOGW("Unknown path name %s\n", name);
+        ALOGW("Unknown path name %s\n", name);
         }
     }
 
@@ -2165,20 +2165,20 @@ static void adev_config_start(void *data, const XML_Char *elem,
     struct route_setting *r;
 
     if (!name) {
-        LOGE("Unnamed control\n");
+        ALOGE("Unnamed control\n");
         return;
     }
 
     if (!val) {
-        LOGE("No value specified for %s\n", name);
+        ALOGE("No value specified for %s\n", name);
         return;
     }
 
-    LOGV("Parsing control %s => %s\n", name, val);
+    ALOGV("Parsing control %s => %s\n", name, val);
 
     r = realloc(s->path, sizeof(*r) * (s->path_len + 1));
     if (!r) {
-        LOGE("Out of memory handling %s => %s\n", name, val);
+        ALOGE("Out of memory handling %s => %s\n", name, val);
         return;
     }
 
@@ -2202,10 +2202,10 @@ static void adev_config_end(void *data, const XML_Char *name)
 
     if (strcmp(name, "path") == 0) {
     if (!s->path_len)
-        LOGW("Empty path\n");
+        ALOGW("Empty path\n");
 
     if (!s->dev) {
-        LOGV("Applying %d element default route\n", s->path_len);
+        ALOGV("Applying %d element default route\n", s->path_len);
 
         set_route_by_array(s->adev->mixer, s->path, s->path_len);
 
@@ -2218,12 +2218,12 @@ static void adev_config_end(void *data, const XML_Char *name)
 
         /* Refactor! */
     } else if (s->on) {
-        LOGV("%d element on sequence\n", s->path_len);
+        ALOGV("%d element on sequence\n", s->path_len);
         s->dev->on = s->path;
         s->dev->on_len = s->path_len;
 
     } else {
-        LOGV("%d element off sequence\n", s->path_len);
+        ALOGV("%d element off sequence\n", s->path_len);
 
         /* Apply it, we'll reenable anything that's wanted later */
         set_route_by_array(s->adev->mixer, s->path, s->path_len);
@@ -2254,16 +2254,16 @@ static int adev_config_parse(struct m0_audio_device *adev)
     property_get("ro.product.device", property, "tiny_hw");
     snprintf(file, sizeof(file), "/system/etc/sound/%s", property);
 
-    LOGV("Reading configuration from %s\n", file);
+    ALOGV("Reading configuration from %s\n", file);
     f = fopen(file, "r");
     if (!f) {
-    LOGE("Failed to open %s\n", file);
+    ALOGE("Failed to open %s\n", file);
     return -ENODEV;
     }
 
     p = XML_ParserCreate(NULL);
     if (!p) {
-    LOGE("Failed to create XML parser\n");
+    ALOGE("Failed to create XML parser\n");
     ret = -ENOMEM;
     goto out;
     }
@@ -2277,14 +2277,14 @@ static int adev_config_parse(struct m0_audio_device *adev)
     while (!eof) {
     len = fread(file, 1, sizeof(file), f);
     if (ferror(f)) {
-        LOGE("I/O error reading config\n");
+        ALOGE("I/O error reading config\n");
         ret = -EIO;
         goto out_parser;
     }
     eof = feof(f);
 
     if (XML_Parse(p, file, len, eof) == XML_STATUS_ERROR) {
-        LOGE("Parse error at line %u:\n%s\n",
+        ALOGE("Parse error at line %u:\n%s\n",
          (unsigned int)XML_GetCurrentLineNumber(p),
          XML_ErrorString(XML_GetErrorCode(p)));
         ret = -EINVAL;
@@ -2337,7 +2337,7 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->mixer = mixer_open(0);
     if (!adev->mixer) {
         free(adev);
-        LOGE("Unable to open the mixer, aborting.");
+        ALOGE("Unable to open the mixer, aborting.");
         return -EINVAL;
     }
 
