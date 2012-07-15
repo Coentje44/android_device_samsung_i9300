@@ -1938,7 +1938,7 @@ static size_t adev_get_input_buffer_size(const struct audio_hw_device *dev,
 {
     size_t size;
     int channel_count = popcount(config->channel_mask);
-    if (check_input_parameters(sample_rate, format, channel_count) != 0)
+    if (check_input_parameters(config->sample_rate, config->format, channel_count) != 0)
         return 0;
 
     return get_input_buffer_size(config->sample_rate, config->format, channel_count);
