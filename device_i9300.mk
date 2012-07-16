@@ -57,11 +57,11 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
 # connection stuff
-PRODUCT_BUILD_PROP_OVERRIDES += \
-	mobiledata.interfaces=pdp0,wlan0,gprs,ppp0
+#PRODUCT_BUILD_PROP_OVERRIDES += \
+#	mobiledata.interfaces=pdp0,wlan0,gprs,ppp0
 
 # ril class
-PRODUCT_BUILD_PROP_OVERRIDES += ro.telephony.ril_class=Smdk4210RIL
+#PRODUCT_BUILD_PROP_OVERRIDES += ro.telephony.ril_class=Smdk4210RIL
 
 # audio
 PRODUCT_COPY_FILES += \
