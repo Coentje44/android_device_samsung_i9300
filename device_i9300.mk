@@ -48,20 +48,24 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
 	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
-# RIL stuff
+# connection stuff
 PRODUCT_BUILD_PROP_OVERRIDES += \
-#	ro.telephony.ril_class=Smdk4210RIL \
 	mobiledata.interfaces=pdp0,wlan0,gprs,ppp0
+
+# ril class
+PRODUCT_BUILD_PROP_OVERRIDES += ro.telephony.ril_class=Smdk4210RIL
 
 # audio
 PRODUCT_COPY_FILES += \
-	device/samsung/i9300/configs/tiny_hw.xml:system/etc/sound/GT-I9300
+	device/samsung/i9300/configs/tiny_hw.xml:system/etc/sound/i9300
+	device/samsung/i9300/configs/audio_policy.conf:system/etc/sound/audio_policy.conf
 
 # HAL stuff
 PRODUCT_PACKAGES += \
 	libsf_dummy_client \
 	audio.primary.exynos4 \
-	audio.a2dp.default	
+	audio.a2dp.default \
+	audio.usb.default
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_i9300
