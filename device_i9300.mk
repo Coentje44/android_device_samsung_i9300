@@ -65,7 +65,7 @@ PRODUCT_BUILD_PROP_OVERRIDES += ro.telephony.ril_class=Smdk4210RIL
 
 # audio
 PRODUCT_COPY_FILES += \
-	device/samsung/i9300/configs/tiny_hw.xml:system/etc/sound/i9300
+	device/samsung/i9300/configs/tiny_hw.xml:system/etc/sound/i9300 \
 	device/samsung/i9300/configs/audio_policy.conf:system/etc/sound/audio_policy.conf
 
 # HAL stuff
