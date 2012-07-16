@@ -90,7 +90,7 @@ struct m0_audio_device {
     int num_dev_cfgs;
     struct mixer *mixer;
     struct mixer_ctls mixer_ctls;
-    int mode;
+    audio_mode_t mode;
     int active_devices;
     int devices;
     struct pcm *pcm_modem_dl;
@@ -675,7 +675,7 @@ static int start_output_stream(struct m0_stream_out *out)
     return -ENOMEM;
 }
 
-static int check_input_parameters(uint32_t sample_rate, int format, int channel_count)
+static int check_input_parameters(uint32_t sample_rate, audio_format_t format, int channel_count)
 {
     if (format != AUDIO_FORMAT_PCM_16_BIT)
         return -EINVAL;
@@ -700,7 +700,7 @@ static int check_input_parameters(uint32_t sample_rate, int format, int channel_
     return 0;
 }
 
-static size_t get_input_buffer_size(uint32_t sample_rate, int format, int channel_count)
+static size_t get_input_buffer_size(uint32_t sample_rate, audio_format_t format, int channel_count)
 {
     size_t size;
     size_t device_rate;
@@ -834,7 +834,7 @@ static int out_get_format(const struct audio_stream *stream)
     return AUDIO_FORMAT_PCM_16_BIT;
 }
 
-static int out_set_format(struct audio_stream *stream, int format)
+static int out_set_format(struct audio_stream *stream, audio_format_t format)
 {
     return 0;
 }
@@ -1165,11 +1165,7 @@ static uint32_t in_get_channels(const struct audio_stream *stream)
 {
     struct m0_stream_in *in = (struct m0_stream_in *)stream;
 
-    if (in->config.channels == 1) {
-        return AUDIO_CHANNEL_IN_MONO;
-    } else {
-        return AUDIO_CHANNEL_IN_STEREO;
-    }
+    return audio_channel_in_mask_from_count(in->config.channels);
 }
 
 static int in_get_format(const struct audio_stream *stream)
@@ -1177,7 +1173,7 @@ static int in_get_format(const struct audio_stream *stream)
     return AUDIO_FORMAT_PCM_16_BIT;
 }
 
-static int in_set_format(struct audio_stream *stream, int format)
+static int in_set_format(struct audio_stream *stream, audio_format_t format)
 {
     return 0;
 }
@@ -1901,7 +1897,7 @@ static int adev_set_master_volume(struct audio_hw_device *dev, float volume)
     return -ENOSYS;
 }
 
-static int adev_set_mode(struct audio_hw_device *dev, int mode)
+static int adev_set_mode(struct audio_hw_device *dev, audio_mode_t mode)
 {
     struct m0_audio_device *adev = (struct m0_audio_device *)dev;
 
