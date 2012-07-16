@@ -22,6 +22,14 @@ PRODUCT_COPY_FILES += \
 	device/samsung/i9300/configs/gps.xml:system/etc/gps.xml \
         device/samsung/i9300/configs/gps.conf:system/etc/gps.conf
 
+# vold
+PRODUCT_COPY_FILES += \
+	device/samsung/i9300/configs/vold.fstab:system/etc/vold.conf
+
+# wifi
+PRODUCT_COPY_FILES += \
+	device/samsung/i9300/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
