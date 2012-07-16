@@ -75,6 +75,10 @@ PRODUCT_PACKAGES += \
 	audio.a2dp.default \
 	audio.usb.default
 
+# macloader
+PRODUCT_PACKAGES += \
+	macloader
+
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_i9300
 PRODUCT_DEVICE := i9300
